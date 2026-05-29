@@ -1,0 +1,1695 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<!-- Replace YOUR-DOMAIN.com before launch -->
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>How to Enable EFS Folder Encryption in Windows 10</title>
+<meta content="A complete guide to enabling Encrypting File System (EFS) in Windows 10. Learn how to fix 'encrypt contents to secure data' greyed out, backup certificates, and secure your files." name="description"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<style>
+
+        :root {
+            --color-base:             #E0E5EC;
+            --color-primary-accent:   #4A6CF7;
+            --color-secondary-accent: #22C55E;
+            --color-body-text:        #4A5568;
+            --color-heading-text:     #364255;
+            --color-muted-text:       #718096;
+            --color-shadow-dark:      #A3B1C6;
+            --color-shadow-light:     #FFFFFF;
+            --font-heading:           'Poppins', sans-serif;
+            --font-body:              'Poppins', sans-serif;
+            --max-reading-width:      820px;
+            --max-wide-width:         1180px;
+            --section-padding-v:      76px;
+            --radius-card:            28px;
+            --radius-soft:            18px;
+            --shadow-raised:          6px 6px 12px var(--color-shadow-dark), -6px -6px 12px var(--color-shadow-light);
+            --shadow-raised-deep:     10px 10px 20px var(--color-shadow-dark), -10px -10px 20px var(--color-shadow-light);
+            --shadow-inset:           inset 4px 4px 8px var(--color-shadow-dark), inset -4px -4px 8px var(--color-shadow-light);
+            --shadow-inset-deep:      inset 7px 7px 14px var(--color-shadow-dark), inset -7px -7px 14px var(--color-shadow-light);
+            --transition-speed:       0.25s;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            scroll-behavior: smooth;
+            background: var(--color-base);
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--color-body-text);
+            background: var(--color-base);
+            line-height: 1.8;
+            font-size: 17px;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-heading);
+            color: var(--color-heading-text);
+            line-height: 1.25;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        h1 {
+            font-size: clamp(34px, 6vw, 52px);
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            font-size: clamp(28px, 4vw, 38px);
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            border: 0;
+            padding: 0 0 0 22px;
+            position: relative;
+        }
+
+        h2::before {
+            content: "";
+            width: 8px;
+            height: 72%;
+            border-radius: 999px;
+            background: linear-gradient(180deg, var(--color-primary-accent), var(--color-secondary-accent));
+            box-shadow: var(--shadow-inset);
+            position: absolute;
+            left: 0;
+            top: 12%;
+        }
+
+        h3 {
+            font-size: 1.35rem;
+            margin-top: 2rem;
+        }
+
+        p { margin-bottom: 1.5rem; }
+        ul, ol { margin-bottom: 1.5rem; margin-left: 1.5rem; }
+        li { margin-bottom: 0.65rem; }
+        strong { color: var(--color-heading-text); font-weight: 700; }
+        em { color: var(--color-muted-text); }
+
+        a {
+            color: var(--color-primary-accent);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color var(--transition-speed), box-shadow var(--transition-speed), transform var(--transition-speed);
+        }
+
+        a:hover {
+            color: #3552D6;
+            text-decoration: none;
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+        .hero-banner,
+        .section-image,
+        .extra-image-frame {
+            width: 100%;
+            border-radius: 30px;
+            margin: 34px auto;
+            padding: 18px;
+            background: var(--color-base);
+            box-shadow: var(--shadow-raised);
+            display: block;
+            overflow: hidden;
+        }
+
+        .hero-banner,
+        .section-image,
+        .extra-image-frame img {
+            height: auto;
+            object-fit: contain;
+        }
+
+        .hero-banner {
+            max-height: 480px;
+            padding: 0;
+            object-fit: contain;
+            background: var(--color-base);
+        }
+
+        .section-image {
+            max-height: 520px;
+            object-fit: contain;
+        }
+
+        .extra-image-frame img {
+            width: 100%;
+            max-height: 520px;
+            object-fit: contain;
+            display: block;
+            border-radius: 22px;
+            box-shadow: var(--shadow-inset);
+            background: var(--color-base);
+        }
+
+        /* Signature Detail: Reading Progress Bar */
+        #progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--color-primary-accent), var(--color-secondary-accent));
+            width: 0%;
+            z-index: 9999;
+            transition: width 0.1s ease-out;
+            border-radius: 0 999px 999px 0;
+            box-shadow: 3px 3px 7px var(--color-shadow-dark), -3px -3px 7px var(--color-shadow-light);
+        }
+
+        /* Header Navigation */
+        .site-header {
+            position: sticky;
+            top: 0;
+            background: rgba(224, 229, 236, 0.92);
+            backdrop-filter: blur(14px);
+            border-bottom: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: box-shadow var(--transition-speed), transform var(--transition-speed);
+        }
+
+        .site-header.scrolled {
+            box-shadow: var(--shadow-raised);
+        }
+
+        .nav-container {
+            max-width: var(--max-wide-width);
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .logo-wordmark {
+            font-family: var(--font-heading);
+            font-size: clamp(1rem, 2.2vw, 1.22rem);
+            font-weight: 700;
+            color: var(--color-heading-text);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            white-space: nowrap;
+            letter-spacing: 0.01em;
+            word-spacing: 0.08em;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: var(--color-base);
+            box-shadow: var(--shadow-raised);
+        }
+
+        .logo-wordmark img {
+            height: 36px;
+            width: 36px;
+            object-fit: contain;
+            border-radius: 14px;
+            box-shadow: var(--shadow-inset);
+            background: var(--color-base);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .nav-links a {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--color-body-text);
+            padding: 9px 13px;
+            border-radius: 999px;
+            background: var(--color-base);
+        }
+
+        .nav-links a:hover {
+            color: var(--color-primary-accent);
+            box-shadow: var(--shadow-raised);
+            transform: translateY(-1px);
+        }
+
+        .nav-cta {
+            padding: 10px 16px !important;
+            border: 0;
+            border-radius: 999px;
+            color: var(--color-primary-accent) !important;
+            box-shadow: var(--shadow-raised);
+        }
+
+        .nav-cta:hover {
+            color: var(--color-primary-accent) !important;
+            box-shadow: var(--shadow-inset);
+            transform: translateY(0);
+        }
+
+        .hamburger {
+            display: none;
+            background: var(--color-base);
+            border: 0;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--color-heading-text);
+            border-radius: 16px;
+            box-shadow: var(--shadow-raised);
+            width: 48px;
+            height: 48px;
+        }
+
+        .hamburger:active,
+        .is-pressed {
+            box-shadow: var(--shadow-inset) !important;
+            transform: translateY(1px) scale(0.99) !important;
+        }
+
+        /* Layout Containers */
+        .section-padding {
+            padding: var(--section-padding-v) 24px;
+            background: var(--color-base);
+        }
+
+        .reading-container {
+            max-width: var(--max-reading-width);
+            margin: 0 auto;
+        }
+
+        .wide-container {
+            max-width: var(--max-wide-width);
+            margin: 0 auto;
+        }
+
+        .bg-tint,
+        .bg-white {
+            background: var(--color-base);
+        }
+
+        /* Hero / Article Header */
+        .article-header {
+            padding: 76px 24px 52px;
+            background: var(--color-base);
+        }
+
+        .article-header .reading-container {
+            max-width: 980px;
+            padding: clamp(26px, 5vw, 54px);
+            border-radius: 42px;
+            background: var(--color-base);
+            box-shadow: var(--shadow-raised);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .article-header .reading-container::before {
+            content: "";
+            position: absolute;
+            inset: 20px;
+            border-radius: 32px;
+            box-shadow: var(--shadow-inset);
+            pointer-events: none;
+            opacity: 0.55;
+        }
+
+        .article-header .reading-container > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .breadcrumb {
+            font-size: 13px;
+            color: var(--color-muted-text);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .breadcrumb a {
+            color: var(--color-muted-text);
+        }
+
+        .meta-bar {
+            display: flex;
+            gap: 12px;
+            font-size: 13px;
+            color: var(--color-muted-text);
+            margin: 24px 0 2rem;
+            padding-top: 0;
+            border-top: 0;
+            flex-wrap: wrap;
+        }
+
+        .meta-bar span {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 999px;
+            padding: 9px 14px;
+            background: var(--color-base);
+            box-shadow: var(--shadow-raised);
+        }
+
+        /* Quick Answer Box */
+        .quick-answer {
+            background: var(--color-base);
+            border: 0;
+            padding: 28px 32px;
+            border-radius: 26px;
+            margin-bottom: 0;
+            box-shadow: var(--shadow-inset);
+        }
+
+        .label-qa {
+            display: inline-flex;
+            align-items: center;
+            font-family: var(--font-heading);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-primary-accent);
+            font-weight: 700;
+            margin-bottom: 12px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            box-shadow: var(--shadow-raised);
+        }
+
+        /* Callouts and Alerts */
+        .callout {
+            padding: 22px 24px;
+            border: 0;
+            border-radius: 24px;
+            margin: 28px 0;
+            background: var(--color-base);
+            display: flex;
+            gap: 16px;
+            box-shadow: var(--shadow-raised);
+        }
+
+        .callout-icon {
+            flex-shrink: 0;
+            color: var(--color-primary-accent);
+            font-weight: 700;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-inset);
+        }
+
+        .callout-warning,
+        .res-fail,
+        .res-success {
+            background: var(--color-base);
+        }
+
+        .callout-warning .callout-icon {
+            color: var(--color-primary-accent);
+        }
+
+        /* Interactive: Edition Checker */
+        .interactive-widget {
+            background: var(--color-base);
+            border: 0;
+            border-radius: 30px;
+            padding: 34px;
+            margin: 36px 0;
+            box-shadow: var(--shadow-raised);
+        }
+
+        .widget-title {
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            margin-top: 0;
+            border: none;
+            padding: 0;
+        }
+
+        .widget-title::before {
+            display: none;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            border: 0;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: box-shadow 100ms ease, transform 100ms ease;
+            background: var(--color-base);
+            box-shadow: var(--shadow-raised);
+            color: var(--color-body-text);
+            font-weight: 500;
+        }
+
+        .radio-label:hover {
+            box-shadow: var(--shadow-raised-deep);
+            transform: translateY(-1px);
+        }
+
+        input[type="radio"] {
+            accent-color: var(--color-primary-accent);
+            width: 18px;
+            height: 18px;
+        }
+
+        #checker-result {
+            padding: 18px;
+            border-radius: 18px;
+            font-weight: 500;
+            display: none;
+            border: 0;
+            box-shadow: var(--shadow-inset);
+        }
+
+        /* Code Snippet Box */
+        .code-block-wrapper {
+            position: relative;
+            background: var(--color-base);
+            border-radius: 24px;
+            margin: 28px 0;
+            box-shadow: var(--shadow-inset);
+        }
+
+        .code-block-wrapper pre {
+            padding: 28px;
+            overflow-x: auto;
+            color: var(--color-heading-text);
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: var(--color-base);
+            border: 0;
+            color: var(--color-primary-accent);
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: box-shadow 100ms ease, transform 100ms ease;
+            box-shadow: var(--shadow-raised);
+        }
+
+        .copy-btn:hover,
+        .copy-btn:active {
+            box-shadow: var(--shadow-inset);
+        }
+
+        /* Premium SaaS Moment */
+        .saas-moment {
+            background: var(--color-base);
+            color: var(--color-body-text);
+            padding: 84px 24px;
+            margin: 42px 0;
+        }
+
+        .saas-moment h2,
+        .saas-moment h3 {
+            color: var(--color-heading-text);
+            border: none;
+        }
+
+        .saas-container {
+            max-width: var(--max-wide-width);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 54px;
+            align-items: center;
+            padding: clamp(28px, 5vw, 54px);
+            border-radius: 42px;
+            background: var(--color-base);
+            box-shadow: var(--shadow-raised);
+        }
+
+        .saas-text p {
+            color: var(--color-body-text);
+        }
+
+        .feature-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 24px 0 26px;
+        }
+
+        .chip {
+            background: var(--color-base);
+            border: 0;
+            box-shadow: var(--shadow-inset);
+            color: var(--color-primary-accent);
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .progress-stack {
+            display: grid;
+            gap: 14px;
+            margin: 8px 0 30px;
+            max-width: 420px;
+        }
+
+        .progress-track {
+            display: block;
+            height: 17px;
+            border-radius: 999px;
+            background: var(--color-base);
+            box-shadow: var(--shadow-inset);
+            overflow: hidden;
+            padding: 4px;
+        }
+
+        .progress-fill {
+            display: block;
+            width: 0%;
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--color-primary-accent), #7891FF);
+            box-shadow: 3px 3px 6px var(--color-shadow-dark), -3px -3px 6px var(--color-shadow-light);
+            transition: width 1.2s cubic-bezier(.16, 1, .3, 1);
+        }
+
+        .progress-stack.in-view .progress-fill {
+            width: calc(var(--fill, 82) * 1%);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 26px;
+            border-radius: 999px;
+            font-weight: 700;
+            text-align: center;
+            cursor: pointer;
+            transition: box-shadow 100ms ease, transform 100ms ease, color var(--transition-speed);
+            font-size: 15px;
+            background: var(--color-base);
+            color: var(--color-primary-accent);
+            border: 0;
+            box-shadow: var(--shadow-raised);
+        }
+
+        .btn-primary {
+            background: var(--color-base);
+            color: var(--color-primary-accent);
+            border: 0;
+        }
+
+        .btn-primary:hover,
+        .btn-outline:hover {
+            color: var(--color-primary-accent);
+            box-shadow: var(--shadow-inset);
+            text-decoration: none;
+        }
+
+        .saas-moment .btn-primary,
+        .btn-outline {
+            background: var(--color-base);
+            color: var(--color-primary-accent);
+            border: 0;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .saas-visual {
+            display: grid;
+            gap: 26px;
+        }
+
+        .mockup-container {
+            background: var(--color-base);
+            border: none;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            border-radius: 34px;
+            box-shadow: var(--shadow-raised);
+        }
+
+        .mockup-container img {
+            width: 100%;
+            height: auto;
+            max-height: 500px;
+            object-fit: contain;
+            border-radius: 24px;
+            box-shadow: var(--shadow-inset);
+            background: var(--color-base);
+            padding: 12px;
+        }
+
+        .security-dial {
+            width: min(240px, 62vw);
+            aspect-ratio: 1;
+            margin: 0 auto;
+            border-radius: 50%;
+            background: var(--color-base);
+            box-shadow: var(--shadow-raised);
+            display: grid;
+            place-items: center;
+            padding: 18px;
+        }
+
+        .security-dial svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        .dial-track,
+        .dial-fill {
+            fill: none;
+            stroke-width: 16;
+            stroke-linecap: round;
+            transform: rotate(-90deg);
+            transform-origin: 80px 80px;
+        }
+
+        .dial-track {
+            stroke: var(--color-base);
+            filter: drop-shadow(4px 4px 6px var(--color-shadow-dark));
+        }
+
+        .dial-fill {
+            stroke: url(#dialGradient);
+            stroke: var(--color-primary-accent);
+            stroke-dasharray: 351.86;
+            stroke-dashoffset: 351.86;
+            transition: stroke-dashoffset 1.25s cubic-bezier(.16, 1, .3, 1);
+        }
+
+        .security-dial.in-view .dial-fill {
+            stroke-dashoffset: 74;
+        }
+
+        .dial-core {
+            fill: var(--color-base);
+            filter: drop-shadow(inset 2px 2px 4px var(--color-shadow-dark));
+        }
+
+        .dial-lock {
+            fill: none;
+            stroke: var(--color-primary-accent);
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* Tables & Comparisons */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 34px 0;
+            padding: 16px;
+            border-radius: 28px;
+            background: var(--color-base);
+            box-shadow: var(--shadow-raised);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+            background: var(--color-base);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: none;
+        }
+
+        th,
+        td {
+            padding: 16px 20px;
+            text-align: left;
+            border-bottom: 0;
+            background: var(--color-base);
+            color: var(--color-body-text);
+        }
+
+        th {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            color: var(--color-heading-text);
+            box-shadow: var(--shadow-inset);
+        }
+
+        td:first-child,
+        th:first-child {
+            border-radius: 16px 0 0 16px;
+        }
+
+        td:last-child,
+        th:last-child {
+            border-radius: 0 16px 16px 0;
+        }
+
+        tr.highlight-row td {
+            font-weight: 600;
+            box-shadow: var(--shadow-inset);
+            color: var(--color-primary-accent);
+        }
+
+        #efs-vs-bitlocker table td:nth-child(2),
+        #efs-vs-bitlocker table th:nth-child(2) {
+            box-shadow: var(--shadow-inset);
+        }
+
+        /* Masonry FAQ */
+        .faq-controls {
+            display: grid;
+            gap: 18px;
+            margin: 28px 0 32px;
+            padding: 20px;
+            border-radius: 30px;
+            background: var(--color-base);
+            box-shadow: var(--shadow-raised);
+        }
+
+        .faq-search {
+            width: 100%;
+            border: 0;
+            outline: none;
+            border-radius: 999px;
+            padding: 16px 20px;
+            font: 500 15px var(--font-body);
+            color: var(--color-body-text);
+            background: var(--color-base);
+            box-shadow: var(--shadow-inset);
+        }
+
+        .faq-search::placeholder {
+            color: var(--color-muted-text);
+        }
+
+        .faq-toggle-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .faq-filter {
+            border: 0;
+            border-radius: 999px;
+            padding: 11px 18px;
+            background: var(--color-base);
+            color: var(--color-body-text);
+            cursor: pointer;
+            font: 700 13px var(--font-body);
+            box-shadow: var(--shadow-raised);
+            transition: box-shadow 100ms ease, transform 100ms ease, color var(--transition-speed);
+        }
+
+        .faq-filter.active,
+        .faq-filter:active {
+            color: var(--color-primary-accent);
+            box-shadow: var(--shadow-inset);
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
+            gap: 24px;
+            margin-top: 32px;
+            align-items: start;
+        }
+
+        .faq-card {
+            background: var(--color-base);
+            padding: 24px;
+            border-radius: 28px;
+            border: 0;
+            box-shadow: var(--shadow-raised);
+            transition: box-shadow var(--transition-speed), transform var(--transition-speed);
+        }
+
+        .faq-card:hover {
+            box-shadow: var(--shadow-raised-deep);
+            transform: translateY(-3px);
+        }
+
+        .faq-card h3 {
+            margin-top: 0;
+            font-size: 1.08rem;
+            margin-bottom: 12px;
+        }
+
+        .faq-card[hidden] {
+            display: none;
+        }
+
+        /* Definition List Features */
+        .feature-dl {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 24px;
+            margin: 34px 0;
+            border-top: 0;
+            padding: 24px;
+            border-radius: 30px;
+            background: var(--color-base);
+            box-shadow: var(--shadow-raised);
+        }
+
+        .feature-dl dt {
+            font-weight: 700;
+            font-family: var(--font-heading);
+            color: var(--color-heading-text);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .feature-dl dt::before {
+            content: "";
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #8EA2FF, var(--color-primary-accent));
+            box-shadow: var(--shadow-inset);
+            flex: 0 0 34px;
+        }
+
+        .feature-dl dd {
+            margin-bottom: 24px;
+            color: var(--color-body-text);
+            padding: 18px 20px;
+            border-radius: 22px;
+            background: var(--color-base);
+            box-shadow: var(--shadow-inset);
+        }
+
+        /* Footer */
+        .site-footer {
+            background: var(--color-base);
+            color: var(--color-body-text);
+            padding: 70px 24px;
+            margin-top: 80px;
+            font-size: 14px;
+        }
+
+        .footer-grid {
+            max-width: var(--max-wide-width);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 34px;
+            padding: 34px;
+            border-radius: 36px;
+            background: var(--color-base);
+            box-shadow: var(--shadow-raised);
+        }
+
+        .footer-grid h4 {
+            color: var(--color-heading-text);
+            margin-bottom: 20px;
+            font-size: 16px;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            word-spacing: 0.08em;
+        }
+
+        .footer-grid h4 img {
+            height: 32px;
+            width: 32px;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: var(--shadow-inset);
+            background: var(--color-base);
+        }
+
+        .footer-links {
+            list-style: none;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: var(--color-body-text);
+            font-weight: 500;
+        }
+
+        .footer-links a:hover {
+            color: var(--color-primary-accent);
+        }
+
+        .footer-bottom {
+            max-width: var(--max-wide-width);
+            margin: 34px auto 0;
+            padding: 28px 32px;
+            border-top: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            border-radius: 30px;
+            background: var(--color-base);
+            box-shadow: var(--shadow-inset);
+        }
+
+        .editorial-disclosure {
+            font-style: italic;
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --shadow-raised:      4px 4px 7px var(--color-shadow-dark), -4px -4px 7px var(--color-shadow-light);
+                --shadow-raised-deep: 6px 6px 12px var(--color-shadow-dark), -6px -6px 12px var(--color-shadow-light);
+                --shadow-inset:       inset 3px 3px 5px var(--color-shadow-dark), inset -3px -3px 5px var(--color-shadow-light);
+                --shadow-inset-deep:  inset 4px 4px 8px var(--color-shadow-dark), inset -4px -4px 8px var(--color-shadow-light);
+                --section-padding-v:  54px;
+            }
+
+            .nav-links,
+            .nav-cta {
+                display: none;
+            }
+
+            .nav-links.active {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: calc(100% + 12px);
+                left: 16px;
+                right: 16px;
+                background: var(--color-base);
+                padding: 20px;
+                border-radius: 28px;
+                box-shadow: var(--shadow-raised);
+                align-items: stretch;
+            }
+
+            .hamburger {
+                display: inline-grid;
+                place-items: center;
+            }
+
+            .nav-container {
+                align-items: center;
+            }
+
+            .saas-container {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .feature-dl {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .feature-dl dd {
+                margin-bottom: 26px;
+            }
+
+            .article-header {
+                padding-top: 34px;
+            }
+
+            .article-header .reading-container,
+            .saas-container,
+            .footer-grid {
+                border-radius: 30px;
+                padding: 24px;
+            }
+
+            .cta-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .meta-bar span {
+                width: 100%;
+            }
+
+            .table-wrapper {
+                padding: 10px;
+            }
+        }
+
+</style>
+</head>
+<body>
+<div id="progress-bar"></div>
+<header class="site-header" id="header">
+<div class="nav-container">
+<div class="logo-wordmark">
+<img alt="Security shield lock graphic for Folder Security Hub" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22160%22%20height%3D%22160%22%20viewBox%3D%220%200%20160%20160%22%20role%3D%22img%22%20aria-label%3D%22Security%20shield%20lock%20graphic%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%2222%22%20y1%3D%2218%22%20x2%3D%22138%22%20y2%3D%22142%22%20gradientUnits%3D%22userSpaceOnUse%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%234A6CF7%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%2322C55E%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%20%20%3Cfilter%20id%3D%22s%22%20x%3D%22-25%25%22%20y%3D%22-25%25%22%20width%3D%22150%25%22%20height%3D%22150%25%22%3E%0A%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%225%22%20dy%3D%225%22%20stdDeviation%3D%226%22%20flood-color%3D%22%23A3B1C6%22%20flood-opacity%3D%22.85%22/%3E%0A%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%22-5%22%20dy%3D%22-5%22%20stdDeviation%3D%226%22%20flood-color%3D%22%23FFFFFF%22%20flood-opacity%3D%22.95%22/%3E%0A%20%20%20%20%3C/filter%3E%0A%20%20%3C/defs%3E%0A%20%20%3Crect%20width%3D%22160%22%20height%3D%22160%22%20rx%3D%2240%22%20fill%3D%22%23E0E5EC%22/%3E%0A%20%20%3Cpath%20filter%3D%22url%28%23s%29%22%20d%3D%22M80%2024%20124%2042v34c0%2031.5-18.6%2051.8-44%2065-25.4-13.2-44-33.5-44-65V42l44-18Z%22%20fill%3D%22url%28%23g%29%22/%3E%0A%20%20%3Cpath%20d%3D%22M58%2073h44c5.5%200%2010%204.5%2010%2010v29c0%205.5-4.5%2010-10%2010H58c-5.5%200-10-4.5-10-10V83c0-5.5%204.5-10%2010-10Z%22%20fill%3D%22%23E0E5EC%22/%3E%0A%20%20%3Cpath%20d%3D%22M64%2073V61c0-9%207-16%2016-16s16%207%2016%2016v12%22%20fill%3D%22none%22%20stroke%3D%22%23E0E5EC%22%20stroke-width%3D%229%22%20stroke-linecap%3D%22round%22/%3E%0A%20%20%3Ccircle%20cx%3D%2280%22%20cy%3D%2296%22%20r%3D%227%22%20fill%3D%22%234A6CF7%22/%3E%0A%20%20%3Cpath%20d%3D%22M80%20103v10%22%20stroke%3D%22%234A6CF7%22%20stroke-width%3D%226%22%20stroke-linecap%3D%22round%22/%3E%0A%3C/svg%3E"/>
+                Folder Security Hub
+            </div>
+<button aria-expanded="false" aria-label="Toggle navigation" class="hamburger" id="menu-toggle">☰</button>
+<nav class="nav-links" id="nav-links">
+<a href="#how-it-works">How EFS Works</a>
+<a href="#setup-guide">Setup Guide</a>
+<a href="#troubleshooting">Fix Greyed Out</a>
+<a href="#efs-vs-bitlocker">Comparison</a>
+<a href="#faq">FAQ</a>
+<a class="nav-cta" href="#recommendation">See Our Top Pick →</a>
+</nav>
+</div>
+</header>
+<main>
+<article>
+<header class="article-header">
+<div class="reading-container">
+<div class="breadcrumb">
+<a href="/">Home</a> / <a href="/windows-security/">Windows Security</a> / EFS Setup
+                    </div>
+<h1>How to Enable EFS Folder Encryption in Windows 10</h1>
+<p>Securing your files in Windows 10 using the native <a href="https://proprivacy.com/guides/encrypt-files-windows" rel="noopener noreferrer" target="_blank">Encrypting File System (EFS)</a> is powerful, but navigating registry limitations, certificate backups, and Windows Home edition restrictions can be confusing. Here is the complete guide to doing it right.</p>
+<img alt="Proactive data security concepts for Windows 10 folder encryption" class="hero-banner" src="https://i.ibb.co/V00KXtpW/folder-lock-10-social-media-ad-proactive-data-security.jpg"/>
+<div class="meta-bar">
+<span>Editorial Team</span>
+<span>Updated: October 2023</span>
+<span>12 min read</span>
+</div>
+<div class="quick-answer" id="quick-answer">
+<span class="label-qa">Quick Answer</span>
+<p><strong>To encrypt a folder in Windows 10:</strong> Right-click the folder, select <strong>Properties</strong>, click <strong>Advanced</strong>, and check the box that says <strong>Encrypt contents to secure data</strong>. Click OK and Apply. <em>Note: If this box is greyed out, you are likely using Windows 10 Home (which does not support EFS natively) or the EFS registry key is disabled.</em></p>
+</div>
+</div>
+</header>
+<section class="section-padding bg-tint">
+<div class="reading-container">
+<h2 style="margin-top:0;">Table of Contents</h2>
+<ul style="list-style: none; margin-left: 0;">
+<li><a href="#requirements">What You Need Before Starting</a></li>
+<li><a href="#how-it-works">How Windows EFS Works</a></li>
+<li><a href="#setup-guide">Method 1: Native OS Method (Step-by-Step)</a></li>
+<li><a href="#troubleshooting">Troubleshooting: 'Encrypt Contents' Greyed Out</a></li>
+<li><a href="#backup-cert">How to Backup Your EFS Certificate</a></li>
+<li><a href="#recommendation">Why We Recommend Folder Lock for Most Users</a></li>
+<li><a href="#efs-vs-bitlocker">EFS vs BitLocker Comparison</a></li>
+<li><a href="#faq">Frequently Asked Questions</a></li>
+</ul>
+</div>
+</section>
+<section class="section-padding" id="requirements">
+<div class="reading-container">
+<h2>What You Need Before Starting (Requirements)</h2>
+<p>Before modifying your system settings, it is crucial to understand that <strong>EFS is heavily dependent on your specific Windows 10 edition</strong>. Enabling file encryption natively is not universally available across all Microsoft operating systems.</p><figure class="extra-image-frame"><img alt="Windows compatibility concept for EFS folder encryption requirements" decoding="async" loading="lazy" src="https://i.ibb.co/xqX6k3tR/Universal-Windows-Compatibility.jpg"/></figure>
+<div class="interactive-widget">
+<h3 class="widget-title">Windows 10 Edition Compatibility Checker</h3>
+<p style="font-size: 14px; margin-bottom: 20px;">Select your Windows edition to see if native EFS is supported on your machine:</p>
+<div class="radio-group" id="edition-radios">
+<label class="radio-label"><input name="os_edition" type="radio" value="home"/> Windows 10 Home</label>
+<label class="radio-label"><input name="os_edition" type="radio" value="pro"/> Windows 10 Pro</label>
+<label class="radio-label"><input name="os_edition" type="radio" value="enterprise"/> Windows 10 Enterprise / Education</label>
+</div>
+<div id="checker-result"></div>
+</div><figure class="extra-image-frame"><img alt="Windows lock screen security illustration for protected user profiles" decoding="async" loading="lazy" src="https://i.ibb.co/xtZC7X09/lock-screen-security.jpg"/></figure>
+<div class="callout callout-warning">
+<span class="callout-icon">!</span>
+<div>
+<strong>Critical Warning:</strong> Never use EFS without backing up your encryption certificate. If your Windows user profile becomes corrupted or you reinstall Windows without a backup, your encrypted files will be permanently lost. We cover <a href="#backup-cert">certificate backup steps</a> below.
+                        </div>
+</div>
+</div>
+</section>
+<section class="section-padding bg-tint" id="how-it-works">
+<div class="reading-container">
+<h2>How Modern Encryption Algorithms Work in EFS</h2>
+<p>When you enable EFS on a folder, Windows utilizes a combination of symmetric and asymmetric encryption to protect your data. It generates a File Encryption Key (FEK) using <a href="https://www.rswebsols.com/data-encryption-types-security/" rel="noopener noreferrer" target="_blank">advanced algorithms</a> (typically AES-256 in modern Windows 10 builds).</p><figure class="extra-image-frame"><img alt="Encryption explainer graphic showing protected files and secure data" decoding="async" loading="lazy" src="https://i.ibb.co/gZ8Tcbqc/what-is-encryption-complete-explainer-for-beginners.jpg"/></figure>
+<p>This FEK is what actually encrypts the contents of your file. However, to keep that key safe, Windows then encrypts the FEK itself using the public key from your user account's EFS certificate. This means the data is bound directly to your specific Windows user profile.</p>
+<h3>How Encryption Protects Data at Rest vs in Transit</h3>
+<p>EFS provides protection for <strong>data at rest</strong>. This means if someone steals your physical hard drive, or logs into the computer using a different Windows account, they cannot read the files. However, if you attach an EFS-encrypted file to an email and send it over the internet (<a href="https://elearningindustry.com/how-to-secure-elearning-cloud-storage-and-data-in-transit" rel="noopener noreferrer" target="_blank">data in transit</a>), Windows decrypts it before attaching it. EFS does not protect files once they leave your NTFS drive.</p><figure class="extra-image-frame"><img alt="Data protection vault illustration for files protected at rest" decoding="async" loading="lazy" src="https://i.ibb.co/bMzYGK6K/Data-Protection-Vault.jpg"/></figure>
+</div>
+</section>
+<section class="section-padding" id="setup-guide">
+<div class="reading-container">
+<h2>Method 1: Native EFS Setup Walkthrough (Step-by-Step)</h2>
+<p>If you are running Windows 10 Pro, Enterprise, or Education, you can enable EFS folder encryption directly through the file properties menu without installing third-party software.</p>
+<ol>
+<li><strong>Locate your target folder:</strong> Open File Explorer and navigate to the folder you want to protect.</li>
+<li><strong>Open Properties:</strong> Right-click the folder and select <strong>Properties</strong> from the context menu.</li>
+<li><strong>Access Advanced Attributes:</strong> Under the General tab, locate the <em>Attributes</em> section and click the <strong>Advanced...</strong> button.</li>
+<li><strong>Enable Encryption:</strong> In the Advanced Attributes window, check the box labeled <strong>Encrypt contents to secure data</strong>.</li>
+<li><strong>Apply Changes:</strong> Click <strong>OK</strong>, then click <strong>Apply</strong> on the main Properties window.</li>
+<li><strong>Choose Scope:</strong> A prompt will ask if you want to apply changes to "this folder only" or "this folder, subfolders and files". For maximum security, select the second option to ensure all current and future contents are encrypted.</li>
+</ol><figure class="extra-image-frame"><img alt="Windows File Explorer folder properties workflow for enabling EFS encryption" decoding="async" loading="lazy" src="https://i.ibb.co/35v0S8cp/Windows-file-explorer.jpg"/></figure>
+<h3>How to Verify It Worked</h3><figure class="extra-image-frame"><img alt="Encrypt folders feature graphic for securing Windows directories" decoding="async" loading="lazy" src="https://i.ibb.co/T9K6tn6/encrypt-folders.png"/></figure>
+<p>Once applied, the names of the encrypted files and folders will appear in green text in File Explorer (depending on your display settings), and a small padlock icon will appear on the file icon. You will still be able to open them normally while logged into your account, but other users on the PC will receive an "Access Denied" error.</p>
+</div>
+</section>
+<section class="section-padding bg-tint" id="troubleshooting">
+<div class="reading-container">
+<h2>Fix 'Encrypt Contents to Secure Data' Greyed Out</h2>
+<p>The most common issue users face is finding the encryption checkbox entirely greyed out and unclickable. This happens for one of three primary reasons.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr>
+<th>Problem / Cause</th>
+<th>How to Fix It</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Windows 10 Home Edition</strong><br/>Home does not support EFS natively.</td>
+<td>You must either upgrade to Windows 10 Pro or use <a href="https://www.avast.com/c-password-protect-file-folder-windows" rel="noopener noreferrer" target="_blank">third-party file encryption software</a>.</td>
+</tr>
+<tr>
+<td><strong>Wrong File System (FAT32)</strong><br/>EFS only works on NTFS drives.</td>
+<td>Format the drive to NTFS, or move the folder to your primary C: drive (which is NTFS).</td>
+</tr>
+<tr>
+<td><strong>Registry Key Disabled</strong><br/>NtfsDisableEncryption is set to 1.</td>
+<td>Run the fsutil command in Command Prompt (shown below) to re-enable EFS routing.</td>
+</tr>
+</tbody>
+</table>
+</div><figure class="extra-image-frame"><img alt="Universal Windows compatibility visual for EFS troubleshooting" decoding="async" loading="lazy" src="https://i.ibb.co/G417bZZc/Universal-Windows.jpg"/></figure>
+<h3>Enable EFS via Command Prompt (fsutil)</h3>
+<p>If you are on Windows 10 Pro but the option is still greyed out, your registry might be blocking it. You can fix this by updating the <code>NtfsDisableEncryption</code> registry behavior.</p>
+<p>Open Command Prompt as an Administrator and paste the following code:</p>
+<div class="code-block-wrapper">
+<button class="copy-btn" onclick="copyCode(this, 'fsutil behavior set disableencryption 0')">Copy</button>
+<pre><code>fsutil behavior set disableencryption 0</code></pre>
+</div>
+<p>Restart your computer after running this command to apply the registry changes.</p>
+<h3>Owner-Safe Access Denied Fixes</h3>
+<p>If you encounter <code>access denied: checkprefs access denied</code> while trying to read your own files, ensure you are logged into the exact user profile that encrypted the files. If you recently reinstalled Windows, you must import your backed-up PFX certificate to regain access.</p>
+</div>
+</section>
+<section class="section-padding" id="backup-cert">
+<div class="reading-container">
+<h2>How to Backup Your EFS Certificate in Windows 10</h2>
+<p>Key management best practices dictate that you must export your certificate immediately after encrypting your first file. Without this backup, a corrupted Windows profile means permanent data loss.</p>
+<ol>
+<li>Press the <strong>Windows Key + R</strong>, type <code>certmgr.msc</code>, and press Enter.</li>
+<li>In the left pane, expand <strong>Personal</strong> and click on <strong>Certificates</strong>.</li>
+<li>Locate the certificate that lists "Encrypting File System" under Intended Purposes.</li>
+<li>Right-click it, go to <strong>All Tasks</strong>, and select <strong>Export</strong>.</li>
+<li>In the wizard, ensure you select <strong>Yes, export the private key</strong>.</li>
+<li>Save the resulting <code>.pfx</code> file to an external, secure USB drive and protect it with a strong password.</li>
+</ol><figure class="extra-image-frame"><img alt="Backup encryption platforms illustration for exporting EFS certificates" decoding="async" loading="lazy" src="https://i.ibb.co/QFzKdFBR/backup-encryption-platforms.jpg"/></figure>
+<p>Alternatively, advanced users can use the certutil tool via command line:</p>
+<div class="code-block-wrapper">
+<button class="copy-btn" onclick="copyCode(this, 'certutil -user -exportpfx My efs_backup.pfx')">Copy</button>
+<pre><code>certutil -user -exportpfx My efs_backup.pfx</code></pre>
+</div>
+</div>
+</section>
+<!-- Premium SaaS Moment: Product CTA Block -->
+<section class="saas-moment" id="recommendation">
+<div class="saas-container">
+<div class="saas-text">
+<h2>Why We Recommend <a href="https://newsoftwares.net/" rel="noopener noreferrer" target="_blank">Folder Lock</a> for Most Users</h2>
+<p>While native Windows 10 EFS is functional, it requires Windows 10 Pro, restricts your files to a single computer, and carries a high risk of permanent data loss if you forget to backup your certificates. For users looking for cross-platform portability and comprehensive privacy, we recommend <strong>Folder Lock</strong>. It leverages AES 256-bit encryption while offering seamless cloud syncing across Windows, Mac, iOS, and Android devices.</p>
+<div class="feature-chips">
+<span class="chip">Cross-Device Sync (PC/Mobile)</span>
+<span class="chip">Military-grade AES-256</span>
+<span class="chip">Secure Digital Wallets</span>
+<span class="chip">Portable USB Lockers</span>
+</div>
+<div aria-hidden="true" class="progress-stack">
+<span class="progress-track"><span class="progress-fill" data-fill="92"></span></span>
+<span class="progress-track"><span class="progress-fill" data-fill="78"></span></span>
+<span class="progress-track"><span class="progress-fill" data-fill="86"></span></span>
+</div>
+
+<div class="cta-group">
+<a class="btn btn-primary" href="https://www.newsoftwares.net/download/folderlock10-en/folder-lock-en.exe" rel="noopener noreferrer" target="_blank">Try Folder Lock Free →</a>
+<a class="btn btn-outline" href="https://store.newsoftwares.net/?add=fl10" rel="noopener noreferrer" target="_blank">Get the Full Version →</a>
+</div>
+</div>
+<div class="saas-visual">
+<div aria-label="Neumorphic security dial" class="security-dial">
+<svg aria-label="Animated encryption security gauge" role="img" viewbox="0 0 160 160">
+<circle class="dial-track" cx="80" cy="80" r="56"></circle>
+<circle class="dial-fill" cx="80" cy="80" r="56"></circle>
+<circle class="dial-core" cx="80" cy="80" r="34"></circle>
+<path class="dial-lock" d="M66 77h28a6 6 0 0 1 6 6v24a6 6 0 0 1-6 6H66a6 6 0 0 1-6-6V83a6 6 0 0 1 6-6Zm7 0V66a7 7 0 0 1 14 0v11"></path>
+</svg>
+</div>
+
+<div class="mockup-container">
+<img alt="Folder Lock dashboard interface showing encrypted lockers and secure wallets" src="https://i.ibb.co/Q713yG79/Folder-Lock-locker.jpg"/>
+</div>
+</div>
+</div>
+</section>
+<section class="section-padding bg-tint" id="features">
+<div class="reading-container">
+<h2>Choosing the Right Encryption Software for Your Needs</h2>
+<p>When native EFS isn't enough, third-party <a href="https://www.cloudwards.net/best-encryption-software/" rel="noopener noreferrer" target="_blank">data encryption software</a> bridges the gap. Here is a breakdown of what dedicated tools like Folder Lock provide compared to the built-in OS methods.</p><figure class="extra-image-frame"><img alt="Secure virtual drive illustration for on the fly encrypted lockers" decoding="async" loading="lazy" src="https://i.ibb.co/q3LHT6Kb/Secure-Virtual-Drive.jpg"/></figure>
+<dl class="feature-dl">
+<dt>Platform Independence &amp; Syncing</dt>
+<dd>Unlike EFS, which binds your files to a specific Windows user account, modern security suites create encrypted containers that sync seamlessly across your entire device ecosystem, including macOS, iOS, and Android.</dd>
+<dt>On-the-Fly Encryption</dt>
+<dd>Advanced tools mount your encrypted lockers as virtual drives. Files are decrypted in RAM only when actively used, ensuring no temporary unencrypted data is left on your hard drive.</dd>
+<dt>Comprehensive Privacy Ecosystem</dt>
+<dd>Beyond just securing directories, top-tier applications incorporate secure digital wallets for sensitive credentials, encrypted note-taking, and secure browsers. They also offer military-grade file shredding to ensure the original, unencrypted source files cannot be recovered using forensic tools.</dd>
+<dt>Granular Access Control</dt>
+<dd>Specialized <a href="https://www.digitalcitizen.life/5-tools-password-protect-your-folders-windows/" rel="noopener noreferrer" target="_blank">folder protection tools</a> allow you to set specific permissions rather than full encryption. For instance, you can configure a directory to be visible but undeletable, or allow viewing but prevent modifications—perfect for shared workstations or protecting executable programs.</dd>
+</dl><figure class="extra-image-frame"><img alt="Best Windows encryption software comparison visual for folder protection tools" decoding="async" loading="lazy" src="https://i.ibb.co/K149f6r/best-windows-encryption-software.jpg"/></figure>
+<img alt="Folder Protect for Windows showing granular access control and folder locking features" class="section-image" src="https://i.ibb.co/RTVcfd3m/folder-protect-for-windows.jpg"/>
+<h3 style="margin-top: 48px; border-top: 1px solid var(--color-border); padding-top: 32px;">Free vs. Premium Tiers: What to Expect</h3>
+<p>When evaluating third-party security software, you will typically find a robust free tier alongside a premium upgrade. Using Folder Lock as the benchmark, the free version provides a generous 1GB encrypted locker, secure digital wallets, and cloud syncing across two devices.</p>
+<p>Upgrading to the full Pro version (typically a lifetime license around $39.95) unlocks unlimited locker sizes, syncing for up to five devices, and advanced capabilities like creating self-executable portable lockers on USB drives, permanent file shredding, and unlimited secure sharing with other users.</p>
+</div>
+</section>
+<section class="section-padding" id="efs-vs-bitlocker">
+<div class="reading-container">
+<h2>EFS vs BitLocker: Which Should You Use?</h2>
+<p>Windows offers two distinct encryption tools. BitLocker is a Full Disk Encryption (FDE) tool, while EFS is a file-level encryption tool. They serve different purposes and can even be used together.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Encrypting File System (EFS)</th>
+<th>BitLocker</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Scope of Protection</strong></td>
+<td>Individual files and folders</td>
+<td>Entire drives and partitions</td>
+</tr>
+<tr>
+<td><strong>Protection Mechanism</strong></td>
+<td>Tied to Windows user account</td>
+<td>Tied to hardware (TPM chip) or PIN</td>
+</tr>
+<tr>
+<td><strong>Best Used For</strong></td>
+<td>Protecting files from other users on the same PC</td>
+<td>Protecting data if the physical laptop is stolen</td>
+</tr>
+<tr>
+<td><strong>Performance Impact</strong></td>
+<td>Minimal (only affects specific files)</td>
+<td>Slight system-wide overhead during read/write</td>
+</tr>
+<tr class="highlight-row">
+<td><strong>Windows 10 Home Support</strong></td>
+<td>No (Pro/Enterprise only)</td>
+<td>No (Requires Pro/Enterprise)</td>
+</tr>
+</tbody>
+</table>
+</div><figure class="extra-image-frame"><img alt="Windows encryption comparison visual for EFS BitLocker and device encryption" decoding="async" loading="lazy" src="https://i.ibb.co/5x1DxZg3/windows-11-encryption-efs-bitlocker-and-device-encryption.jpg"/></figure>
+</div>
+</section>
+<section class="section-padding bg-tint">
+<div class="reading-container">
+<h2>Windows 10 End-of-Life Security Implications</h2>
+<p>Windows 10 reaches its end of support in October 2025. After this date, Microsoft will no longer provide security updates or technical support. Continuing to rely purely on native OS-level encryption (like EFS) on an unsupported operating system poses a significant risk to data at rest. Migrating to platform-independent encryption software ensures your files remain secure even if the host OS develops unpatched vulnerabilities.</p><figure class="extra-image-frame"><img alt="Windows security tools illustration for operating system end of support risks" decoding="async" loading="lazy" src="https://i.ibb.co/84gBFQ3x/windows-security-tools-microsoft-defender-and-built-in-features.jpg"/></figure>
+</div>
+</section>
+<section class="section-padding" id="faq">
+<div class="reading-container">
+<h2>Frequently Asked Questions</h2><figure class="extra-image-frame"><img alt="Security shield illustration for frequently asked encryption questions" decoding="async" loading="lazy" src="https://i.ibb.co/bjywWFhL/security-shield-protecting.jpg"/></figure>
+
+<div aria-label="FAQ filter controls" class="faq-controls">
+<input aria-label="Search FAQ" class="faq-search" id="faq-search" placeholder="Search FAQ..." type="search"/>
+<div aria-label="FAQ topic filters" class="faq-toggle-group" role="group">
+<button class="faq-filter active" data-filter="all" type="button">All</button>
+<button class="faq-filter" data-filter="efs" type="button">EFS</button>
+<button class="faq-filter" data-filter="windows" type="button">Windows</button>
+<button class="faq-filter" data-filter="folder" type="button">Folders</button>
+</div>
+</div>
+<div class="faq-grid">
+<div class="faq-card">
+<h3>How to enable EFS in Windows 10 Home?</h3>
+<p>You cannot enable EFS natively in Windows 10 Home. Microsoft restricts this feature to Pro, Enterprise, and Education editions. Home users must use <a href="https://www.makeuseof.com/windows-11-password-protect-folder/" rel="noopener noreferrer" target="_blank">third-party encryption software</a> to protect folders.</p>
+</div>
+<div class="faq-card">
+<h3>Why is 'Encrypt contents to secure data' greyed out?</h3>
+<p>This usually happens for three reasons: you are using Windows 10 Home, the drive is formatted as FAT32 instead of NTFS, or the EFS service has been disabled via the registry.</p>
+</div>
+<div class="faq-card">
+<h3>Can EFS encrypted folders be accessed by another user?</h3>
+<p>No. By default, only the Windows user account that encrypted the file can access it. Other administrators on the same machine will receive an Access Denied error unless you explicitly share the certificate with them.</p>
+</div>
+<div class="faq-card">
+<h3>Does encryption slow down my PC significantly?</h3>
+<p>File-level encryption like EFS has virtually no noticeable impact on modern PCs, especially those with Solid State Drives (SSDs). The AES algorithm is hardware-accelerated by most modern CPUs.</p>
+</div>
+<div class="faq-card">
+<h3>What happens to encrypted files if I forget the password?</h3>
+<p>If you lose your Windows account password and cannot log in, and you do not have a backup of your EFS .pfx certificate, the encrypted files are permanently unrecoverable. There is no backdoor.</p>
+</div>
+<div class="faq-card">
+<h3>How to remove EFS encryption from a folder?</h3>
+<p>Right-click the folder, go to Properties &gt; Advanced, and uncheck the "Encrypt contents to secure data" box. Click OK and Apply. You must be logged into the authorized user account to do this.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="section-padding bg-tint" id="verdict">
+<div class="reading-container" style="text-align: center;">
+<img alt="All new Folder Lock 10 providing comprehensive file encryption and security" class="section-image" src="https://i.ibb.co/QFbN84jx/folder-lock-10-social-media-ad-all-new.jpg" style="margin-bottom: 32px;"/>
+<h2>Our Verdict</h2>
+<p>Native EFS in Windows 10 is a capable tool for basic file separation between users on a shared PC—provided you have Windows 10 Pro and rigorously backup your certificates. However, for true <a href="https://www.techradar.com/best/best-encryption-software" rel="noopener noreferrer" target="_blank">data security</a>, cross-device portability across mobile and Mac, and ease of use, native OS tools fall short.</p><figure class="extra-image-frame"><img alt="Shielded workspace illustration for practical file security decisions" decoding="async" loading="lazy" src="https://i.ibb.co/sv39r4G5/The-Shielded-Workspace.jpg"/></figure>
+<p>For most users, relying on a dedicated security suite eliminates the risk of registry errors and OS lockouts while providing a much broader safety net against data theft. We recommend evaluating your actual daily device usage before relying solely on isolated built-in Windows features.</p>
+<div style="margin-top: 32px; display: flex; justify-content: center; gap: 16px;">
+<a class="btn btn-outline" href="https://www.newsoftwares.net/download/folderlock10-en/folder-lock-en.exe" rel="noopener noreferrer" style="color: var(--color-primary-accent); border-color: var(--color-primary-accent);" target="_blank">Try Folder Lock Free →</a>
+<a class="btn btn-outline" href="https://store.newsoftwares.net/?add=fl10" rel="noopener noreferrer" style="color: var(--color-primary-accent); border-color: var(--color-primary-accent);" target="_blank">View Full Version Pricing →</a>
+</div>
+</div>
+</section>
+</article>
+</main>
+<footer class="site-footer">
+<div class="footer-grid">
+<div>
+<h4>
+<img alt="Security shield lock graphic for Folder Security Hub" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22160%22%20height%3D%22160%22%20viewBox%3D%220%200%20160%20160%22%20role%3D%22img%22%20aria-label%3D%22Security%20shield%20lock%20graphic%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%2222%22%20y1%3D%2218%22%20x2%3D%22138%22%20y2%3D%22142%22%20gradientUnits%3D%22userSpaceOnUse%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%234A6CF7%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%2322C55E%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%20%20%3Cfilter%20id%3D%22s%22%20x%3D%22-25%25%22%20y%3D%22-25%25%22%20width%3D%22150%25%22%20height%3D%22150%25%22%3E%0A%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%225%22%20dy%3D%225%22%20stdDeviation%3D%226%22%20flood-color%3D%22%23A3B1C6%22%20flood-opacity%3D%22.85%22/%3E%0A%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%22-5%22%20dy%3D%22-5%22%20stdDeviation%3D%226%22%20flood-color%3D%22%23FFFFFF%22%20flood-opacity%3D%22.95%22/%3E%0A%20%20%20%20%3C/filter%3E%0A%20%20%3C/defs%3E%0A%20%20%3Crect%20width%3D%22160%22%20height%3D%22160%22%20rx%3D%2240%22%20fill%3D%22%23E0E5EC%22/%3E%0A%20%20%3Cpath%20filter%3D%22url%28%23s%29%22%20d%3D%22M80%2024%20124%2042v34c0%2031.5-18.6%2051.8-44%2065-25.4-13.2-44-33.5-44-65V42l44-18Z%22%20fill%3D%22url%28%23g%29%22/%3E%0A%20%20%3Cpath%20d%3D%22M58%2073h44c5.5%200%2010%204.5%2010%2010v29c0%205.5-4.5%2010-10%2010H58c-5.5%200-10-4.5-10-10V83c0-5.5%204.5-10%2010-10Z%22%20fill%3D%22%23E0E5EC%22/%3E%0A%20%20%3Cpath%20d%3D%22M64%2073V61c0-9%207-16%2016-16s16%207%2016%2016v12%22%20fill%3D%22none%22%20stroke%3D%22%23E0E5EC%22%20stroke-width%3D%229%22%20stroke-linecap%3D%22round%22/%3E%0A%20%20%3Ccircle%20cx%3D%2280%22%20cy%3D%2296%22%20r%3D%227%22%20fill%3D%22%234A6CF7%22/%3E%0A%20%20%3Cpath%20d%3D%22M80%20103v10%22%20stroke%3D%22%234A6CF7%22%20stroke-width%3D%226%22%20stroke-linecap%3D%22round%22/%3E%0A%3C/svg%3E"/>
+                    Folder Security Hub
+                </h4>
+<p style="margin-bottom: 16px;">Your independent guide to protecting data, understanding encryption algorithms, and securing your digital life.</p>
+</div>
+<div>
+<h4>Guide Sections</h4>
+<ul class="footer-links">
+<li><a href="#how-it-works">EFS Basics</a></li>
+<li><a href="#setup-guide">Setup Tutorial</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+<li><a href="#efs-vs-bitlocker">BitLocker Comparison</a></li>
+</ul>
+</div>
+<div>
+<h4>Legal &amp; Info</h4>
+<ul class="footer-links">
+<li><a href="#">Privacy Policy</a></li>
+<li><a href="#">Terms of Use</a></li>
+<li><a href="#">Contact</a></li>
+</ul>
+</div>
+</div>
+<div class="footer-bottom">
+<p class="editorial-disclosure">This site operates as an independent editorial resource. Some links may earn a referral commission at no cost to you. Product recommendations reflect editorial judgment and independent assessment.</p>
+<p>Folder Lock is developed by <a href="https://www.newsoftwares.net" rel="noopener noreferrer" target="_blank">NewSoftwares.net</a>.</p>
+<p>© 2023 Folder Security Hub. All rights reserved.</p>
+</div>
+</footer>
+<!-- Schema Markup -->
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "name": "FolderSecurityHub",
+          "description": "The complete guide to Windows 10 file protection",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "{search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "WebPage",
+          "name": "How to Enable EFS Folder Encryption in Windows 10",
+          "description": "A complete guide to enabling Encrypting File System (EFS) in Windows 10."
+        },
+        {
+          "@type": "Article",
+          "headline": "How to Enable EFS Folder Encryption in Windows 10",
+          "author": {
+            "@type": "Organization",
+            "name": "FolderSecurityHub Editorial Team"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "NewSoftwares.net"
+          },
+          "datePublished": "2023-10-01",
+          "dateModified": "2023-10-01"
+        },
+        {
+          "@type": "HowTo",
+          "name": "How to Enable EFS in Windows 10",
+          "step": [
+            {
+              "@type": "HowToStep",
+              "text": "Right-click the target folder and select Properties."
+            },
+            {
+              "@type": "HowToStep",
+              "text": "Under the General tab, click the Advanced button."
+            },
+            {
+              "@type": "HowToStep",
+              "text": "Check the box labeled 'Encrypt contents to secure data'."
+            },
+            {
+              "@type": "HowToStep",
+              "text": "Click OK and then Apply."
+            }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "How to enable EFS in Windows 10 Home?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You cannot enable EFS natively in Windows 10 Home. Microsoft restricts this feature to Pro, Enterprise, and Education editions. Home users must use third-party encryption software to protect folders."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Why is 'Encrypt contents to secure data' greyed out?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "This usually happens for three reasons: you are using Windows 10 Home, the drive is formatted as FAT32 instead of NTFS, or the EFS service has been disabled via the registry."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can EFS encrypted folders be accessed by another user?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. By default, only the Windows user account that encrypted the file can access it. Other administrators on the same machine will receive an Access Denied error unless you explicitly share the certificate with them."
+              }
+            }
+          ]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Windows Security"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "EFS Setup"
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+<script defer="">
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // 1. Sticky Header Scroll Class
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 10) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+
+            // 2. Mobile Hamburger Toggle
+            const menuToggle = document.getElementById('menu-toggle');
+            const navLinks = document.getElementById('nav-links');
+            if(menuToggle && navLinks) {
+                menuToggle.addEventListener('click', () => {
+                    const expanded = menuToggle.getAttribute('aria-expanded') === 'true' || false;
+                    menuToggle.setAttribute('aria-expanded', !expanded);
+                    navLinks.classList.toggle('active');
+                });
+            }
+
+            // 3. Smooth Scroll for Anchor Links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const targetId = this.getAttribute('href');
+                    if(targetId === '#') return;
+                    const targetEl = document.querySelector(targetId);
+                    if (targetEl) {
+                        e.preventDefault();
+                        if(navLinks && navLinks.classList.contains('active')) {
+                            navLinks.classList.remove('active');
+                        }
+                        const headerOffset = 88;
+                        const elementPosition = targetEl.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // 4. SIGNATURE DETAIL: Reading Progress Bar
+            const progressBar = document.getElementById('progress-bar');
+            const updateReadingProgress = () => {
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = height ? (winScroll / height) * 100 : 0;
+                progressBar.style.width = scrolled + '%';
+            };
+            window.addEventListener('scroll', updateReadingProgress);
+            updateReadingProgress();
+
+            // 5. Interactive: Edition Checker Logic
+            const editionRadios = document.querySelectorAll('input[name="os_edition"]');
+            const resultBox = document.getElementById('checker-result');
+
+            editionRadios.forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    resultBox.style.display = 'block';
+                    resultBox.className = ''; 
+                    const val = e.target.value;
+
+                    if (val === 'home') {
+                        resultBox.classList.add('res-fail');
+                        resultBox.innerHTML = "<strong>Not Supported.</strong> Windows 10 Home does not include native EFS. You will need to upgrade to Pro or use a third-party tool like Folder Lock.";
+                    } else {
+                        resultBox.classList.add('res-success');
+                        resultBox.innerHTML = "<strong>Supported!</strong> Your edition includes native EFS. You can follow the setup guide below.";
+                    }
+                });
+            });
+
+            // 6. Button press physics for tactile neumorphism
+            document.querySelectorAll('.btn, .nav-cta, .copy-btn, .hamburger, .faq-filter, .radio-label').forEach(el => {
+                const press = () => el.classList.add('is-pressed');
+                const release = () => el.classList.remove('is-pressed');
+                el.addEventListener('mousedown', press);
+                el.addEventListener('touchstart', press, { passive: true });
+                ['mouseup', 'mouseleave', 'touchend', 'touchcancel'].forEach(evt => el.addEventListener(evt, release));
+            });
+
+            // 7. Scroll-triggered progress fills and security dial
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.35 });
+
+            document.querySelectorAll('.progress-fill').forEach(fill => {
+                fill.style.setProperty('--fill', fill.dataset.fill || '82');
+            });
+            document.querySelectorAll('.progress-stack, .security-dial').forEach(el => observer.observe(el));
+
+            // 8. FAQ inset search + soft toggle filters
+            const faqSearch = document.getElementById('faq-search');
+            const faqCards = Array.from(document.querySelectorAll('.faq-card'));
+            const faqFilters = Array.from(document.querySelectorAll('.faq-filter'));
+            let activeFilter = 'all';
+
+            function normalize(value) {
+                return (value || '').toLowerCase().trim();
+            }
+
+            function applyFaqFilters() {
+                const query = normalize(faqSearch ? faqSearch.value : '');
+                faqCards.forEach(card => {
+                    const text = normalize(card.innerText);
+                    const matchesSearch = !query || text.includes(query);
+                    const matchesFilter = activeFilter === 'all' || text.includes(activeFilter);
+                    card.hidden = !(matchesSearch && matchesFilter);
+                });
+            }
+
+            faqFilters.forEach(button => {
+                button.addEventListener('click', () => {
+                    faqFilters.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    activeFilter = button.dataset.filter || 'all';
+                    applyFaqFilters();
+                });
+            });
+
+            if (faqSearch) {
+                faqSearch.addEventListener('keyup', applyFaqFilters);
+                faqSearch.addEventListener('search', applyFaqFilters);
+            }
+        });
+
+        // 9. Copy to Clipboard Utility
+        function copyCode(btnElement, text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = btnElement.innerText;
+                btnElement.innerText = 'Copied!';
+                btnElement.classList.add('is-pressed');
+                setTimeout(() => {
+                    btnElement.innerText = originalText;
+                    btnElement.classList.remove('is-pressed');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        }
+
+</script>
+</body>
+</html>
