@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://stevefrankns.github.io/How-to-Enable-EFS-Folder-Encryption-Windows-10/sitemap.xml
